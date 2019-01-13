@@ -1,5 +1,8 @@
 <head>
 <style>
+body {
+	background-color:#999;
+}
 table, th, td {
   border: 1px solid black;
   border-collapse: collapse;
@@ -24,10 +27,7 @@ table th {
   color: white;
   background-color: grey;
 }
-/* use class names to hide content for jQuery v3.0 - see https://github.com/jquery/jquery/issues/2308 */
 .hidden { display: none; }
-
-/* override child row hovering defined in the theme file */
 #table2 tbody > tr.even.hover > td,
 #table2 tbody > tr.even:hover > td,
 #table2 tbody > tr.even:hover + tr.tablesorter-childRow > td,
@@ -56,14 +56,14 @@ table th {
 }
 </style>
 <link rel="stylesheet" href="tablesort/css/theme.default.css">
-<!-- load jQuery and tablesorter scripts -->
 <script type="text/javascript" src="tablesort/jquery.js"></script>
 <script type="text/javascript" src="tablesort/js/jquery.tablesorter.js"></script>
-<!-- tablesorter widgets (optional) -->
 <script type="text/javascript" src="tablesort/js/jquery.tablesorter.widgets.js"></script>
 </head>
 <body>
-<div id="infos" style="overflow: auto; height: 400px; margin-left: 15px">
+<h3 style="margin-left: 20px; margin-top: 10px; color:white; font-size:24px">MovieDB (c) by Hendrik Haas 2019</h3>
+<!-- info container for jQuery changes -->
+<div id="infos" style="overflow: auto; height: 400px; margin-left: 20px">
 <h1 id="demo"></h1>
 <div class="row">
   <div class="column">
@@ -75,11 +75,10 @@ table th {
 </div>
 <p id="link"></p>
 </div>
-<div id="back" style="margin: 10 10 10 10">
+<div id="back" style="margin: 20 20 20 20">
 <button onClick="myFunction()">Infos</button>
 <?php
 $root = __DIR__;
-
 function is_in_dir($file, $directory, $recursive = true, $limit = 1000) {
     $directory = realpath($directory);
     $parent = realpath($file);
@@ -132,14 +131,16 @@ if (is_file($root.$path)) {
     readfile($root.$path);
     return;
 }
-
+$ext = array(); #array for all movies in dir
 if ($path) echo '<a href="?file='.urlencode(substr(dirname($root.$path), strlen($root) + 1)).' style="margin-left:20px">.. (back)</a><br /></div><div style="margin-top:10px; overflow: auto; height: 400px">';
 else echo '<br /></div><div style="margin-top:10px; overflow: auto; height: 400px">';
 echo '<table id="myTable" class="tablesorter"><thead><tr><th style="width: 400px" class="sorter-currency">File</th><th style="width: 300px" class="sorter-currency">Type</th><th style="width: 300px" class="sorter-currency">Size</th><th style="width: 100px">Infos</th></tr></thead><tbody>';
 foreach (glob($root.$path.'/*') as $file) {
     $file = realpath($file);
     $link = substr($file, strlen($root) + 1);
-	if ($file === "tablesort"){ continue;}
+	if(preg_match('/^.*\.(mp4|mov|avi|mkv|flv|vob|wmv|mpg|m4v|3gp)$/i', $file)){
+    $ext[] = $link;
+	}          
 	echo '<tr>';
 	if (is_file($file)){
 		$size = filesize($file);
@@ -151,15 +152,21 @@ foreach (glob($root.$path.'/*') as $file) {
 		}
 		echo '</td><td>'.$size/1000 .' KB</td><td></td>';
 	} else {
-		echo '<td><a href="?file='.urlencode($link).'">'.basename($file).'</a></td><td>'.mime_content_type($file).'</td><td>'.getDirectorySize($file)/1000 .' KB</td><td><button onclick="searchAPI(\''.basename($file).'\')">Get it</button><br />';
+			if ($file === "tablesort"){ continue;} else {
+		echo '<td><a href="?file='.urlencode($link).'">'.basename($file).'</a></td><td>'.mime_content_type($file).'</td><td>'.getDirectorySize($file)/1000 .' KB</td><td><button onclick="searchAPI(\''.basename($file).'\')">Get it</button><br />';}
 	}
 	echo '</tr>';
 }
-echo '</table></div>';
+echo '</table></div><div style="margin-left:20px">';
+if (count($ext) > 0) {
+	foreach ($ext as $mfile){
+	echo "<h2>".basename($mfile)."</h2>";
+	echo "<video style=\"margin-left: 20px; margin-top: 10px\" width='1024' controls><source src=\"" .$mfile."\" type=\"video/mp4\">Your browser does not support the video tag.</video>";}
+}
+echo "</div>";
 ?>
 <script type="text/javascript">
 $( function() {
-
   var $table1 = $( '#myTable' )
     .tablesorter({
       theme : 'blue',
@@ -175,7 +182,7 @@ $( function() {
         // search from beginning
         filter_startsWith : false,
         // Set this option to false to make the searches case sensitive
-        filter_ignoreCase : true
+        filter_ignoreCase : false
       }
     });
   $table1.find( '.tablesorter-childRow td' ).addClass( 'hidden' );
@@ -208,18 +215,16 @@ var settings = {
   "headers": {},
   "data": "{}"
 }
-
 $.ajax(settings).done(function (response) {
-  console.log(response);
-	document.getElementById("demo").innerHTML = response.results[0].original_title
+  console.log(response); //for debugging -> comment if you want
+	document.getElementById("demo").innerHTML = "<h1><a href=\"https://www.themoviedb.org/movie/" + response.results[0].id + "\" target=\"_blank\" >" + response.results[0].original_title + "</a></h1>"
 	document.getElementById("image").innerHTML = "<img src=\"http://image.tmdb.org/t/p/w500/" + response.results[0].poster_path + "\" >"
 	document.getElementById("image2").innerHTML = "<img src=\"http://image.tmdb.org/t/p/w500/" + response.results[0].backdrop_path + "\" >"
-	document.getElementById("link").innerHTML = response.results[0].overview
-	myFunction()
+	document.getElementById("link").innerHTML = "<p style=\"width: 1300px\">" + response.results[0].overview + "</p>"
 });}
 </script>
 <script type="text/javascript">
-function myFunction() {
+function myFunction() {	//closes or opens the info container
   var x = document.getElementById("infos");
   if (x.style.display === "none") {
     x.style.display = "block";
@@ -230,7 +235,7 @@ function myFunction() {
 </script>
 <script type="text/javascript">
 $(document).ready(function() {
-          $('.infos').hide();
+		  myFunction();	//hide info container on initial page load
 });
 </script>
 </body>
