@@ -221,7 +221,12 @@ $.ajax(settings).done(function (response) {
 	document.getElementById("image").innerHTML = "<img src=\"http://image.tmdb.org/t/p/w500/" + response.results[0].poster_path + "\" >"
 	document.getElementById("image2").innerHTML = "<img src=\"http://image.tmdb.org/t/p/w500/" + response.results[0].backdrop_path + "\" >"
 	document.getElementById("link").innerHTML = "<p style=\"width: 1300px\">" + response.results[0].overview + "</p>"
-});}
+});
+var x = document.getElementById("infos");
+  if (x.style.display === "none") {
+	  x.style.display = "block";	//open info block if hidden
+  }
+}
 </script>
 <script type="text/javascript">
 function myFunction() {	//closes or opens the info container
