@@ -1,60 +1,5 @@
 <head>
-<style>
-body {
-	background-color:#999;
-}
-table, th, td {
-  border: 1px solid black;
-  border-collapse: collapse;
-}
-th, td {
-  padding: 15px;
-}
-th {
-  text-align: left;
-}
-table {
-  margin-left: 20px;
-  border-spacing: 5px;
-}
-table tr:nth-child(even) {
-  background-color: #CFCFCF;
-}
-table tr:nth-child(odd) {
-  background-color: #fff;
-}
-table th {
-  color: white;
-  background-color: grey;
-}
-.hidden { display: none; }
-#table2 tbody > tr.even.hover > td,
-#table2 tbody > tr.even:hover > td,
-#table2 tbody > tr.even:hover + tr.tablesorter-childRow > td,
-#table2 tbody > tr.even:hover + tr.tablesorter-childRow + tr.tablesorter-childRow > td {
-  background-color: #fff;
-}
-#table2 tbody > tr.odd.hover > td,
-#table2 tbody > tr.odd:hover > td,
-#table2 tbody > tr.odd:hover + tr.tablesorter-childRow > td,
-#table2 tbody > tr.odd:hover + tr.tablesorter-childRow + tr.tablesorter-childRow > td {
-  background-color: #ebf2fa;
-}
-#table2 tbody > tr.even:hover > td,
-#table2 tbody > tr.odd:hover > td {
-  background-color: #d9d9d9;
-}
-.column {
-  float: left;
-  width: 33.33%;
-  padding: 5px;
-}
-.row::after {
-  content: "";
-  clear: both;
-  display: table;
-}
-</style>
+<link rel="stylesheet" type="text/css" href="style.css">
 <link rel="stylesheet" href="tablesort/css/theme.default.css">
 <script type="text/javascript" src="tablesort/jquery.js"></script>
 <script type="text/javascript" src="tablesort/js/jquery.tablesorter.js"></script>
@@ -142,6 +87,10 @@ foreach (glob($root.$path.'/*') as $file) {
     $ext[] = $link;
 	}          
 	echo '<tr>';
+	if (basename($file) === "tablesort"){ continue;}
+	if (basename($file) === "index.php"){ continue;}
+	if (basename($file) === "style.css"){ continue;}
+	if (basename($file) === "README.md"){ continue;}
 	if (is_file($file)){
 		$size = filesize($file);
     	echo '<td><a href="?file='.urlencode($link).'">'.basename($file).'</a></td><td>';
@@ -152,11 +101,9 @@ foreach (glob($root.$path.'/*') as $file) {
 		}
 		echo '</td><td>'.$size/1000 .' KB</td><td></td>';
 	} else {
-			if ($file === "tablesort"){ continue;} else {
 		echo '<td><a href="?file='.urlencode($link).'">'.basename($file).'</a></td><td>'.mime_content_type($file).'</td><td>'.getDirectorySize($file)/1000 .' KB</td><td><button onclick="searchAPI(\''.basename($file).'\')">Get it</button><br />';}
 	}
 	echo '</tr>';
-}
 echo '</table></div><div style="margin-left:20px">';
 if (count($ext) > 0) {
 	foreach ($ext as $mfile){

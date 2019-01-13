@@ -1,0 +1,57 @@
+@charset "utf-8";
+/* CSS Document */
+
+body {
+	background-color:#999;
+}
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 15px;
+}
+th {
+  text-align: left;
+}
+table {
+  margin-left: 20px;
+  border-spacing: 5px;
+}
+table tr:nth-child(even) {
+  background-color: #CFCFCF;
+}
+table tr:nth-child(odd) {
+  background-color: #fff;
+}
+table th {
+  color: white;
+  background-color: grey;
+}
+.hidden { display: none; }
+#table2 tbody > tr.even.hover > td,
+#table2 tbody > tr.even:hover > td,
+#table2 tbody > tr.even:hover + tr.tablesorter-childRow > td,
+#table2 tbody > tr.even:hover + tr.tablesorter-childRow + tr.tablesorter-childRow > td {
+  background-color: #fff;
+}
+#table2 tbody > tr.odd.hover > td,
+#table2 tbody > tr.odd:hover > td,
+#table2 tbody > tr.odd:hover + tr.tablesorter-childRow > td,
+#table2 tbody > tr.odd:hover + tr.tablesorter-childRow + tr.tablesorter-childRow > td {
+  background-color: #ebf2fa;
+}
+#table2 tbody > tr.even:hover > td,
+#table2 tbody > tr.odd:hover > td {
+  background-color: #d9d9d9;
+}
+.column {
+  float: left;
+  width: 33.33%;
+  padding: 5px;
+}
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
