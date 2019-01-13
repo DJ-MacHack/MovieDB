@@ -44,6 +44,16 @@ table th {
 #table2 tbody > tr.odd:hover > td {
   background-color: #d9d9d9;
 }
+.column {
+  float: left;
+  width: 33.33%;
+  padding: 5px;
+}
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
 </style>
 <link rel="stylesheet" href="tablesort/css/theme.default.css">
 <!-- load jQuery and tablesorter scripts -->
@@ -53,13 +63,20 @@ table th {
 <script type="text/javascript" src="tablesort/js/jquery.tablesorter.widgets.js"></script>
 </head>
 <body>
-<div id="infos">
-<p id="demo"></p>
+<div id="infos" style="overflow: auto; height: 400px; margin-left: 15px">
+<h1 id="demo"></h1>
+<div class="row">
+  <div class="column">
 <p id="image"></p>
+  </div>
+  <div class="column">
 <p id="image2"></p>
+  </div>
+</div>
 <p id="link"></p>
 </div>
-<button onclick="myFunction()">Try it</button>
+<div id="back" style="margin: 10 10 10 10">
+<button onClick="myFunction()">Infos</button>
 <?php
 $root = __DIR__;
 
@@ -116,11 +133,13 @@ if (is_file($root.$path)) {
     return;
 }
 
-if ($path) echo '<a href="?file='.urlencode(substr(dirname($root.$path), strlen($root) + 1)).' style="margin-left:20px">.. (back)</a><br />';
+if ($path) echo '<a href="?file='.urlencode(substr(dirname($root.$path), strlen($root) + 1)).' style="margin-left:20px">.. (back)</a><br /></div><div style="margin-top:10px; overflow: auto; height: 400px">';
+else echo '<br /></div><div style="margin-top:10px; overflow: auto; height: 400px">';
 echo '<table id="myTable" class="tablesorter"><thead><tr><th style="width: 400px" class="sorter-currency">File</th><th style="width: 300px" class="sorter-currency">Type</th><th style="width: 300px" class="sorter-currency">Size</th><th style="width: 100px">Infos</th></tr></thead><tbody>';
 foreach (glob($root.$path.'/*') as $file) {
     $file = realpath($file);
     $link = substr($file, strlen($root) + 1);
+	if ($file === "tablesort"){ continue;}
 	echo '<tr>';
 	if (is_file($file)){
 		$size = filesize($file);
@@ -136,7 +155,7 @@ foreach (glob($root.$path.'/*') as $file) {
 	}
 	echo '</tr>';
 }
-#echo '</body>';
+echo '</table></div>';
 ?>
 <script type="text/javascript">
 $( function() {
