@@ -19,6 +19,7 @@
   </div>
 </div>
 <p id="link"></p>
+<p id="genre"></p>
 </div>
 <div id="back" style="margin: 20 20 20 20">
 <button onClick="myFunction()">Infos</button>
@@ -99,16 +100,38 @@ foreach (glob($root.$path.'/*') as $file) {
 		} else {
 			echo 'file';
 		}
-		echo '</td><td>'.$size/1000 .' KB</td><td></td>';
+		echo '</td><td>'.round($size/1000000, 2) .' MB</td><td><button id=\"but_info\" onclick="searchAPI(\''.basename(dirname($file)).'\')">Get it</button><br /></td>';
 	} else {
-		echo '<td><a href="?file='.urlencode($link).'">'.basename($file).'</a></td><td>'.mime_content_type($file).'</td><td>'.getDirectorySize($file)/1000 .' KB</td><td><button onclick="searchAPI(\''.basename($file).'\')">Get it</button><br />';}
+		echo '<td><a href="?file='.urlencode($link).'">'.basename($file).'</a></td><td>'.mime_content_type($file).'</td><td>'.round(getDirectorySize($file)/1000000, 2) .' MB</td><td><button onclick="searchAPI(\''.basename($file).'\')">Get it</button><br /></td>';}
 	}
 	echo '</tr>';
 echo '</table></div><div style="margin-left:20px">';
 if (count($ext) > 0) {
 	foreach ($ext as $mfile){
-	echo "<h2>".basename($mfile)."</h2>";
-	echo "<video style=\"margin-left: 20px; margin-top: 10px\" width='1024' controls><source src=\"" .$mfile."\" type=\"video/mp4\">Your browser does not support the video tag.</video>";}
+	$file_video = pathinfo($mfile);
+	if(basename($file_video['extension'] === "mp4")){
+		echo "<h2>".basename($mfile)."</h2>";
+		echo "<video style=\"margin-left: 20px; margin-top: 10px\" width='1024' controls><source src=\"" .$mfile."\" type=\"video/mp4\">Your browser does not support the video tag.</video>";
+		echo "<p>Download: </p><a href=\"".$mfile."\" about=\"_blank\">".$mfile."</a><br /><br />"; 
+		} else {
+		if(basename($file_video['extension'] === "ogg")){
+		echo "<h2>".basename($mfile)."</h2>";
+		echo "<video style=\"margin-left: 20px; margin-top: 10px\" width='1024' controls><source src=\"" .$mfile."\" type=\"video/ogg\">Your browser does not support the video tag.</video>";
+		echo "<p>Download: </p><a href=\"".$mfile."\" about=\"_blank\">".$mfile."</a><br /><br />";
+		} else {	if(basename($file_video['extension'] === "webm")){
+		echo "<h2>".basename($mfile)."</h2>";
+		echo "<video style=\"margin-left: 20px; margin-top: 10px\" width='1024' controls><source src=\"" .$mfile."\" type=\"video/webm\">Your browser does not support the video tag.</video>";
+		echo "<p>Download: </p><a href=\"".$mfile."\" about=\"_blank\">".$mfile."</a><br /><br />";
+		}  else { if(basename($file_video['extension'] === "mkv")){
+		echo "<h2>".basename($mfile)."</h2>";
+		echo "<video style=\"margin-left: 20px; margin-top: 10px\" width='1024' controls><source src=\"" .$mfile."\" type=\"video/mp4\">Your browser does not support the video tag. Use Google Chrome instead!</video>";
+		echo "<p>Download: </p><a href=\"".$mfile."\" about=\"_blank\">".$mfile."</a><br /><br />";
+		} else  {
+		echo "<h2>".basename($mfile)."</h2>";
+		echo "<p>File type is not supported!</p>";
+		echo "<p>Download: </p><a href=\"".$mfile."\" about=\"_blank\">".$mfile."</a><br /><br />";
+		}}}}			
+	}
 }
 echo "</div>";
 ?>
@@ -168,6 +191,33 @@ $.ajax(settings).done(function (response) {
 	document.getElementById("image").innerHTML = "<img src=\"http://image.tmdb.org/t/p/w500/" + response.results[0].poster_path + "\" >"
 	document.getElementById("image2").innerHTML = "<img src=\"http://image.tmdb.org/t/p/w500/" + response.results[0].backdrop_path + "\" >"
 	document.getElementById("link").innerHTML = "<p style=\"width: 1300px\">" + response.results[0].overview + "</p>"
+	var le = response.results[0].genre_ids.length;
+	var gen = "<p>Genre: ";
+	var i;
+	for (i = 0; i < le; i++) { 
+		if(response.results[0].genre_ids[i] === 18) { gen = gen + "Drama, "; }
+		if(response.results[0].genre_ids[i] === 28) { gen = gen + "Action, "; }
+		if(response.results[0].genre_ids[i] === 12) { gen = gen + "Adventure, "; }
+		if(response.results[0].genre_ids[i] === 878) { gen = gen + "Science-Ficition, "; }
+		if(response.results[0].genre_ids[i] === 16) { gen = gen + "Animation, "; }
+		if(response.results[0].genre_ids[i] === 35) { gen = gen + "Comedy, "; }
+		if(response.results[0].genre_ids[i] === 80) { gen = gen + "Crime, "; }
+		if(response.results[0].genre_ids[i] === 53) { gen = gen + "Thriller, "; }
+		if(response.results[0].genre_ids[i] === 99) { gen = gen + "Documentary, "; }
+		if(response.results[0].genre_ids[i] === 10751) { gen = gen + "Family, "; }
+		if(response.results[0].genre_ids[i] === 14) { gen = gen + "Fantasy, "; }
+		if(response.results[0].genre_ids[i] === 36) { gen = gen + "History, "; }
+		if(response.results[0].genre_ids[i] === 10402) { gen = gen + "Music, "; }
+		if(response.results[0].genre_ids[i] === 9648) { gen = gen + "Mystery, "; }
+		if(response.results[0].genre_ids[i] === 10749) { gen = gen + "Romance, "; }
+		if(response.results[0].genre_ids[i] === 10770) { gen = gen + "TV-Movie, "; }
+		if(response.results[0].genre_ids[i] === 10752) { gen = gen + "War, "; }
+		if(response.results[0].genre_ids[i] === 37) { gen = gen + "Western, "; }
+		if(response.results[0].genre_ids[i] === 27) { gen = gen + "Horror, "; }
+	}
+	gen = gen.slice(0, -2);
+	gen = gen + "</p>";
+	document.getElementById("genre").innerHTML = gen;
 });
 var x = document.getElementById("infos");
   if (x.style.display === "none") {
