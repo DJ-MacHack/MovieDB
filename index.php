@@ -1,4 +1,5 @@
 <head>
+<title>MovieDB</title>
 <link rel="stylesheet" type="text/css" href="style.css">
 <link rel="stylesheet" href="tablesort/css/theme.default.css">
 <script type="text/javascript" src="tablesort/jquery.js"></script>
@@ -6,20 +7,24 @@
 <script type="text/javascript" src="tablesort/js/jquery.tablesorter.widgets.js"></script>
 </head>
 <body>
-<h3 style="margin-left: 20px; margin-top: 10px; color:white; font-size:24px">MovieDB (c) by Hendrik Haas 2019</h3>
+<h3 style="margin-left: 20px; margin-top: 10px; color:#00465B; font-size:24px">MovieDB &copy; by Hendrik Haas 2019</h3>
 <!-- info container for jQuery changes -->
-<div id="infos" style="overflow: auto; height: 400px; margin-left: 20px">
+<div id="container" style="min-width: 400px;">
+<div id="infos" style="overflow: auto; height: 400px; margin-left: 20px;">
 <h1 id="demo"></h1>
 <div class="row">
-  <div class="column">
+  <div class="column" style="width: 600px;">
 <p id="image"></p>
   </div>
-  <div class="column">
+  <div class="column" style="width: 600px;">
 <p id="image2"></p>
   </div>
 </div>
 <p id="link"></p>
 <p id="genre"></p>
+<p id="release"></p>
+<p id="vote"></p>
+</div>
 </div>
 <div id="back" style="margin: 20 20 20 20">
 <button onClick="myFunction()">Infos</button>
@@ -87,24 +92,23 @@ foreach (glob($root.$path.'/*') as $file) {
 	if(preg_match('/^.*\.(mp4|mov|avi|mkv|flv|vob|wmv|mpg|m4v|3gp)$/i', $file)){
     $ext[] = $link;
 	}          
-	echo '<tr>';
 	if (basename($file) === "tablesort"){ continue;}
 	if (basename($file) === "index.php"){ continue;}
 	if (basename($file) === "style.css"){ continue;}
 	if (basename($file) === "README.md"){ continue;}
 	if (is_file($file)){
 		$size = filesize($file);
-    	echo '<td><a href="?file='.urlencode($link).'">'.basename($file).'</a></td><td>';
+    	echo '<tr><td><a href="?file='.urlencode($link).'">'.basename($file).'</a></td><td>';
 		if (!getMimeType($file)){
 			echo mime_content_type($file);
 		} else {
 			echo 'file';
 		}
-		echo '</td><td>'.round($size/1000000, 2) .' MB</td><td><button id=\"but_info\" onclick="searchAPI(\''.basename(dirname($file)).'\')">Get it</button><br /></td>';
+		echo '</td><td>'.round($size/1000000, 2) .' MB</td><td><button id="but_info" onclick="searchAPI(\''.basename(dirname($file)).'\')">Get it</button><br /></td>';
 	} else {
-		echo '<td><a href="?file='.urlencode($link).'">'.basename($file).'</a></td><td>'.mime_content_type($file).'</td><td>'.round(getDirectorySize($file)/1000000, 2) .' MB</td><td><button onclick="searchAPI(\''.basename($file).'\')">Get it</button><br /></td>';}
-	}
+		echo '<tr><td><a href="?file='.urlencode($link).'">'.basename($file).'</a></td><td>'.mime_content_type($file).'</td><td>'.round(getDirectorySize($file)/1000000, 2) .' MB</td><td><button onclick="searchAPI(\''.basename($file).'\')">Get it</button><br /></td>';}
 	echo '</tr>';
+	}
 echo '</table></div><div style="margin-left:20px">';
 if (count($ext) > 0) {
 	foreach ($ext as $mfile){
@@ -152,7 +156,7 @@ $( function() {
         // search from beginning
         filter_startsWith : false,
         // Set this option to false to make the searches case sensitive
-        filter_ignoreCase : false
+        filter_ignoreCase : true
       }
     });
   $table1.find( '.tablesorter-childRow td' ).addClass( 'hidden' );
@@ -190,7 +194,19 @@ $.ajax(settings).done(function (response) {
 	document.getElementById("demo").innerHTML = "<h1><a href=\"https://www.themoviedb.org/movie/" + response.results[0].id + "\" target=\"_blank\" >" + response.results[0].original_title + "</a></h1>"
 	document.getElementById("image").innerHTML = "<img src=\"http://image.tmdb.org/t/p/w500/" + response.results[0].poster_path + "\" >"
 	document.getElementById("image2").innerHTML = "<img src=\"http://image.tmdb.org/t/p/w500/" + response.results[0].backdrop_path + "\" >"
-	document.getElementById("link").innerHTML = "<p style=\"width: 1300px\">" + response.results[0].overview + "</p>"
+	document.getElementById("link").innerHTML = "<p style=\"width: 1000px\">" + response.results[0].overview + "</p>"
+	var date=new Date(response.results[0].release_date);
+    day=date.getDate();
+    month=date.getMonth();
+    month=month+1;
+    if((String(day)).length==1)
+    day='0'+day;
+    if((String(month)).length==1)
+    month='0'+month;
+
+    dateT=day+ '.' + month + '.' + date.getFullYear();
+	document.getElementById("release").innerHTML = "<p style=\"width: 400px\">Release date: " + dateT + "</p>"
+	document.getElementById("vote").innerHTML = "<p style=\"width: 400px\">Viewer rating: " + response.results[0].vote_average + " / 10</p>"
 	var le = response.results[0].genre_ids.length;
 	var gen = "<p>Genre: ";
 	var i;

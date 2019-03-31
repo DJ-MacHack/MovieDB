@@ -2,7 +2,7 @@
 /* CSS Document */
 
 body {
-	background-color:#999;
+	background-color:#E7E8E9;
 }
 table, th, td {
   border: 1px solid black;
@@ -18,31 +18,34 @@ table {
   margin-left: 20px;
   border-spacing: 5px;
 }
+a {
+	text-decoration: none;
+}
 table tr:nth-child(even) {
-  background-color: #CFCFCF;
+  background-color: #DCE4E9;
 }
 table tr:nth-child(odd) {
   background-color: #fff;
 }
 table th {
   color: white;
-  background-color: grey;
+  background-color: 0F718E;
 }
 .hidden { display: none; }
-#table2 tbody > tr.even.hover > td,
-#table2 tbody > tr.even:hover > td,
-#table2 tbody > tr.even:hover + tr.tablesorter-childRow > td,
-#table2 tbody > tr.even:hover + tr.tablesorter-childRow + tr.tablesorter-childRow > td {
-  background-color: #fff;
+#myTable tbody > tr.even.hover > td,
+#myTable tbody > tr.even:hover > td,
+#myTable tbody > tr.even:hover + tr.tablesorter-childRow > td,
+#myTable tbody > tr.even:hover + tr.tablesorter-childRow + tr.tablesorter-childRow > td {
+  background-color: #d9d9d9;
 }
-#table2 tbody > tr.odd.hover > td,
-#table2 tbody > tr.odd:hover > td,
-#table2 tbody > tr.odd:hover + tr.tablesorter-childRow > td,
-#table2 tbody > tr.odd:hover + tr.tablesorter-childRow + tr.tablesorter-childRow > td {
-  background-color: #ebf2fa;
+#myTable tbody > tr.odd.hover > td,
+#myTable tbody > tr.odd:hover > td,
+#myTable tbody > tr.odd:hover + tr.tablesorter-childRow > td,
+#myTable tbody > tr.odd:hover + tr.tablesorter-childRow + tr.tablesorter-childRow > td {
+  background-color: #d9d9d9;
 }
-#table2 tbody > tr.even:hover > td,
-#table2 tbody > tr.odd:hover > td {
+#myTable tbody > tr.even:hover > td,
+#myTable tbody > tr.odd:hover > td {
   background-color: #d9d9d9;
 }
 .column {
