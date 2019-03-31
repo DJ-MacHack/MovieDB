@@ -118,7 +118,7 @@ if (count($ext) > 0) {
 	if(basename($file_video['extension'] === "mp4")){
 		echo "<h2>".basename($mfile)."</h2>";
 		echo "<video style=\"margin-left: 20px; margin-top: 10px\" width='1024' controls><source src=\"" .$mfile."\" type=\"video/mp4\">Your browser does not support the video tag.</video>";
-		echo "<p>Download: </p><a href=\"".$mfile."\" about=\"_blank\">".$mfile."</a><br /><br />"; 
+		echo "<p><b>Download: </b><a href=\"".$mfile."\" about=\"_blank\">".$mfile."</a></p><br /><br />"; 
 		} else {
 		if(basename($file_video['extension'] === "ogg")){
 		echo "<h2>".basename($mfile)."</h2>";
