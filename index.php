@@ -1,5 +1,7 @@
 <head>
 <title>MovieDB</title>
+<link rel="shortcut icon" href="tablesort/fav.png" type="image/png" />
+<link rel="icon" href="tablesort/fav.png" type="image/png" />
 <link rel="stylesheet" type="text/css" href="style.css">
 <link rel="stylesheet" href="tablesort/css/theme.default.css">
 <script type="text/javascript" src="tablesort/jquery.js"></script>
